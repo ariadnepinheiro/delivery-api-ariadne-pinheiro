@@ -26,9 +26,9 @@ public class HealthController {
         return new AppInfo(
             "Delivery API", 
             "1.0.0", 
-            "Ariadne",
+            "Ariadne Pinheiro",
             "JDK 21",
-            "Spring Boot"
+            "Spring Boot 3.2.x"
         );
     }
     
