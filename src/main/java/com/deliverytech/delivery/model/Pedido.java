@@ -58,7 +58,7 @@ public class Pedido {
     @JoinColumn(name = "restaurante_id", nullable = false)
     private Restaurante restaurante;
 
-    @OneToMany(mappedBy = "pedidos", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY)
     private List<ItemPedido> itens = new ArrayList<>();
 
 }
