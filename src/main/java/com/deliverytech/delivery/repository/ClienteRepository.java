@@ -11,5 +11,7 @@ import com.deliverytech.delivery.model.Cliente;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     Optional<Cliente> findByEmail(String email);
+    boolean existsByEmail(String email);
     List<Cliente> findByAtivoTrue();
+    List<Cliente> findByNomeContaining(String nome);
 }
