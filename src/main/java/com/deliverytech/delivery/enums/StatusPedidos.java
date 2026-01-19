@@ -1,6 +1,6 @@
 package com.deliverytech.delivery.enums;
 
-public class StatusPedidos {
+public enum StatusPedidos {
     PEDENTE,
     CONFIRMADO,
     ENTREGUE,

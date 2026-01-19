@@ -1,18 +1,17 @@
 package com.deliverytech.delivery.model;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.FetchType;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,7 +41,5 @@ public class Restaurante {
 
     @OneToMany(mappedBy = "restaurantes", fetch = FetchType.LAZY)
     private List<Pedido> pedidos = new ArrayList<>();
-
-
 
 }

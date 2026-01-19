@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import com.deliverytech.delivery.model.Restaurante;
 
-
+@Repository
 public interface RestauranteReposiory extends JpaRepository<Restaurante, Long> {
     List<Restaurante> findByAtivoTrue();
     List<Restaurante> findByCategory(String categoria);
-    List<Restaurante> findByAtivoTrueOrderByRating();
+    List<Restaurante> findByAtivoTrueOrderByRatingDesc();
     
 }

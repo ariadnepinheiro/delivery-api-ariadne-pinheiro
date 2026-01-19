@@ -1,16 +1,18 @@
 package com.deliverytech.delivery.model;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -32,7 +34,7 @@ public class Cliente {
     private LocalDateTime dataCadastro;
     private Boolean ativo;
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "clientes")
     private List<Pedido> pedidos = new ArrayList<>();
 
     
