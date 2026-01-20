@@ -17,6 +17,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+
 @Entity
 @Table(name = "restaurantes")
 public class Restaurante {
@@ -24,7 +25,6 @@ public class Restaurante {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nome;
     private String categoria;
     private String endereco;
@@ -36,10 +36,10 @@ public class Restaurante {
 
     private Boolean ativo;
     
-    @OneToMany(mappedBy = "restaurante", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "restaurantes", fetch = FetchType.LAZY)
     private List<Produto> produtos = new ArrayList<>();
 
-    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "restaurantes", fetch = FetchType.LAZY)
     private List<Pedido> pedidos = new ArrayList<>();
 
 }

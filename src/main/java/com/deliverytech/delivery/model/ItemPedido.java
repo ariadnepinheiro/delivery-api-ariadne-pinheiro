@@ -16,6 +16,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+
 @Entity
 @Table(name = "itens_pedido")
 public class ItemPedido {

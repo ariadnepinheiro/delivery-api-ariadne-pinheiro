@@ -1,6 +1,7 @@
 package com.deliverytech.delivery.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -18,13 +19,43 @@ public class ClienteService {
         this.clienteRepository = clienteRepository;
     }
 
-    public Cliente cadastrar(Cliente cliente) {
+    public Cliente cadastrarCliente(Cliente cliente) {
         if(clienteRepository.existsByEmail(cliente.getEmail())) {
             throw new IllegalArgumentException("Email já cadastrado");
         }
-        return clienteRepository.save(cliente);
-
         cliente.setAtivo(true);
         cliente.setDataCadastro(LocalDateTime.now());
+        return clienteRepository.save(cliente);
     }
+
+    public List<Cliente> listarAtivos() {
+        return clienteRepository.findByAtivoTrue();
+    }
+
+    public List<Cliente> buscarPorNome(String nome){
+        return clienteRepository.findByNomeContainingIgnoreCase(nome);
+    }
+
+    public Cliente buscarPorId(Long id) {
+        return clienteRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+    }
+
+    public Cliente atualizarCliente(Long id, Cliente dadosAtualizados) {
+        Cliente clienteExistente = buscarPorId(id);
+
+        clienteExistente.setNome(dadosAtualizados.getNome());
+        clienteExistente.setEmail(dadosAtualizados.getEmail());
+        clienteExistente.setTelefone(dadosAtualizados.getTelefone());
+        clienteExistente.setEndereco(dadosAtualizados.getEndereco());
+
+        return clienteRepository.save(clienteExistente);
+    }
+
+    public void desativarCliente(Long id) {
+        Cliente clienteExistente = buscarPorId(id);
+        clienteExistente.setAtivo(false);
+        clienteRepository.save(clienteExistente);
+    }
+
 }

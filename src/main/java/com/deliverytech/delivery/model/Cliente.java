@@ -16,6 +16,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+
 @Entity
 @Table(name = "clientes")
 
@@ -34,7 +35,7 @@ public class Cliente {
     private LocalDateTime dataCadastro;
     private Boolean ativo;
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "clientes")
     private List<Pedido> pedidos = new ArrayList<>();
 
     
