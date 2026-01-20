@@ -35,7 +35,7 @@ public class Cliente {
     private LocalDateTime dataCadastro;
     private Boolean ativo;
 
-    @OneToMany(mappedBy = "clientes")
+    @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos = new ArrayList<>();
 
     

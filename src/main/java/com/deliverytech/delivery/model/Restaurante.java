@@ -36,10 +36,10 @@ public class Restaurante {
 
     private Boolean ativo;
     
-    @OneToMany(mappedBy = "restaurantes", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "restaurante", fetch = FetchType.LAZY)
     private List<Produto> produtos = new ArrayList<>();
 
-    @OneToMany(mappedBy = "restaurantes", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "restaurante", fetch = FetchType.LAZY)
     private List<Pedido> pedidos = new ArrayList<>();
 
 }
