@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +26,7 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     private String nome;
 
     @Column(unique = true, nullable = false)
@@ -33,11 +36,11 @@ public class Cliente {
 
     @Column(name = "data_cadastro", nullable = false)
     private LocalDateTime dataCadastro;
+    
     private Boolean ativo;
 
     @OneToMany(mappedBy = "cliente")
+    @JsonIgnore
     private List<Pedido> pedidos = new ArrayList<>();
-
-    
 
 }
