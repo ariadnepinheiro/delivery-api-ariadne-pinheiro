@@ -35,4 +35,8 @@ public class ProdutoService {
         return produtoRepository.findByRestauranteIdAndDisponivelTrue(restauranteId);
     }
 
+    public Object adicionarProdutoNoRestaurante(Long restauranteId, Produto produtoRequest) {
+        throw new UnsupportedOperationException("Unimplemented method 'adicionarProdutoNoRestaurante'");
+    }
+
 }

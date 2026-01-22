@@ -30,17 +30,21 @@ public class RestauranteController {
     @PostMapping
     public ResponseEntity<Restaurante> cadastrarRestaurante(@RequestBody Restaurante restaurante) {
         return ResponseEntity.status(201).body(restauranteService.cadastrarRestaurante(restaurante));
-        
     }
 
-    @GetMapping
-    public List<Restaurante> listarRestaurantes(@RequestParam(required = false) String nome) {
+    @GetMapping("/listar")
+    public List<Restaurante> listarRestaurantes() {
         return restauranteService.listarAtivos();
     }
     
     @GetMapping("/{id}")
     public Restaurante buscarRestaurantePorId(@PathVariable Long id) {
         return restauranteService.buscarPorId(id);
+    }
+
+    @GetMapping("/categoria/{categoria}")
+    public List<Restaurante> buscarRestaurantePorCategoria(@PathVariable String categoria){
+        return restauranteService.buscarPorCategoria(categoria);
     }
 
     @DeleteMapping("/{id}")
