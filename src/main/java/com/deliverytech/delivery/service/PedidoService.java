@@ -48,15 +48,16 @@ public class PedidoService {
 
     public Pedido criarPedido(Long clienteId, Long restauranteId){
         Cliente cliente = clienteRepository.findById(clienteId)
-        .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+        .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado."));
 
         Restaurante restaurante = restauranteRepository.findById(restauranteId)
-        .orElseThrow(() -> new IllegalArgumentException("Restaurante não encontrado"));
+        .orElseThrow(() -> new IllegalArgumentException("Restaurante não encontrado."));
 
         Pedido entradaPedido = new Pedido();
         entradaPedido.setCliente(cliente);
         entradaPedido.setRestaurante(restaurante);
-        entradaPedido.setStatus(StatusPedidos.PEDENTE);
+        /* entradaPedido.setNumeroPedido(); */        
+        entradaPedido.setStatus(StatusPedidos.PENDENTE);
         entradaPedido.setDataPedido(LocalDateTime.now());
         entradaPedido.setValorTotal(BigDecimal.ZERO);
         return pedidoRepository.save(entradaPedido);

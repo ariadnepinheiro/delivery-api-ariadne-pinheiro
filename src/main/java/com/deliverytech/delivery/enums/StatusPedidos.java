@@ -1,8 +1,8 @@
 package com.deliverytech.delivery.enums;
 
 public enum StatusPedidos {
-    PEDENTE,
+    PENDENTE,
     CONFIRMADO,
     ENTREGUE,
-    CANCELADO    
+    CANCELADO,     
 }

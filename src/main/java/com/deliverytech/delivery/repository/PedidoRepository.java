@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.deliverytech.delivery.dto.TotalVendasPorRestauranteDTO;
 import com.deliverytech.delivery.enums.StatusPedidos;
 import com.deliverytech.delivery.model.Pedido;
 
@@ -20,10 +21,21 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     @Query("""
             SELECT p FROM Pedido p 
             WHERE p.dataPedido BETWEEN :inicio AND :fim
-    """)
-
-    List<Pedido> findByDateTime(
-        @Param("inicio") LocalDateTime inicio, 
-        @Param("fim") LocalDateTime fim
+        """)
+        List<Pedido> findByDateTime(
+            @Param("inicio") LocalDateTime inicio, 
+            @Param("fim") LocalDateTime fim
     );
+
+    @Query("""
+            select com.deliverytech.delivery.dto.TotalVendasPorRestauranteDTO(
+            r.NOME,
+            coalesce(sum(ip.SUBTOTAL), 0) as total_por_restaurante
+            )
+            from RESTAURANTES r
+            join PEDIDOS p on p.RESTAURANTE_ID = r.ID 
+            join ITENS_PEDIDO ip on ip.PEDIDO_ID = p.ID
+            group by r.NOME;
+        """)
+        List<TotalVendasPorRestauranteDTO> totalVendasPorRestaurante();
 }
