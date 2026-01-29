@@ -22,9 +22,12 @@ INSERT INTO produtos (
 (1, 'Pizza Margherita', 'Molho de tomate, mussarela e manjericão', 'Pizza', 35.90, true, 1),
 (2, 'Pizza Calabresa', 'Molho de tomate, mussarela e calabresa', 'Pizza', 38.90, true, 1),
 (3, 'Lasanha Bolonhesa', 'Lasanha tradicional com molho bolonhesa', 'Massa', 28.90, true, 1),
+
 (4, 'X-Burger', 'Hambúrguer, queijo, alface e tomate', 'Hambúrguer', 18.90, true, 2),
 (5, 'X-Bacon', 'Hambúrguer, queijo, bacon, alface e tomate', 'Hambúrguer', 22.90, true, 2),
+
 (6, 'Batata Frita', 'Porção de batata frita crocante', 'Acompanhamento', 12.90, true, 2),
+
 (7, 'Combo Sashimi', '15 peças de sashimi variado', 'Sashimi', 45.90, true, 3),
 (8, 'Hot Roll Salmão', '8 peças de hot roll de salmão', 'Hot Roll', 32.90, true, 3);
 
@@ -41,8 +44,12 @@ INSERT INTO pedidos (
     restaurante_id
 ) VALUES
 (1, CURRENT_TIMESTAMP, 'Rua A, 123', 'PED1234567890', 5.00, 64.80, 'PENDENTE', 1, 1),
+
 (2, CURRENT_TIMESTAMP, 'Rua B, 456', 'PED1234567891', 7.00, 41.80, 'CONFIRMADO', 2, 2),
+
 (3, CURRENT_TIMESTAMP, 'Rua C, 789', 'PED1234567892', 6.00, 78.80, 'ENTREGUE', 3, 3);
+
+
 
 
 INSERT INTO itens_pedido (quantidade, preco_unitario, subtotal, pedido_id, produto_id) VALUES
