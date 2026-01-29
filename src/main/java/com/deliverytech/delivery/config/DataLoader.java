@@ -101,6 +101,7 @@ public class DataLoader {
             pedido1.setRestaurante(r1);
             pedido1.setStatus(StatusPedidos.PENDENTE);
             pedido1.setEnderecoEntrega(cliente1.getEndereco());
+            pedido1.setTaxaEntrega(r1.getTaxaEntrega());
             pedido1.setValorTotal(BigDecimal.ZERO);
 
             Pedido pedido2 = new Pedido();
@@ -108,6 +109,7 @@ public class DataLoader {
             pedido2.setRestaurante(r2);
             pedido2.setStatus(StatusPedidos.PENDENTE);
             pedido2.setEnderecoEntrega(cliente2.getEndereco());
+            pedido2.setTaxaEntrega(r2.getTaxaEntrega());
             pedido2.setValorTotal(BigDecimal.ZERO);
 
             pedidoRepository.save(pedido1);

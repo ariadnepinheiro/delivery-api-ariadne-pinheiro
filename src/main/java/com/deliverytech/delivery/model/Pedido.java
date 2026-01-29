@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.deliverytech.delivery.enums.StatusPedidos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -71,5 +72,17 @@ public class Pedido {
     @PrePersist
     public void prePersist(){
         this.dataPedido = LocalDateTime.now();
+
+        if (this.numeroPedido == null || this.numeroPedido.isBlank()) {
+            this.numeroPedido = "PED" + UUID.randomUUID()
+                    .toString()
+                    .replace("-", "")
+                    .substring(0, 10)
+                    .toUpperCase();
+        }
+
+        if (this.taxaEntrega == null) {
+            this.taxaEntrega = BigDecimal.ZERO;
+        }
     }
 }
