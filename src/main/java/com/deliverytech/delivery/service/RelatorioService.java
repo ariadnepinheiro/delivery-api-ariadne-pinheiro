@@ -17,4 +17,8 @@ public class RelatorioService {
     public List<TotalVendasPorRestauranteDTO> totalVendasPorRestaurante(){
         return respository.totalVendasPorRestaurante();
     }
+
+    public List<Object[]> rankingClientes() {
+        return respository.rankingClientes();
+    }
 }
