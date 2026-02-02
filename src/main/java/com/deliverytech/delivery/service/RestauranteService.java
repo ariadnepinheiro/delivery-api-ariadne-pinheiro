@@ -1,23 +1,39 @@
 package com.deliverytech.delivery.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import com.deliverytech.delivery_api.dto.requests.RestauranteDTO;
+import com.deliverytech.delivery_api.dto.responses.RestauranteResponseDTO;
+import com.deliverytech.delivery_api.exceptions.BusinessException;
 
 import com.deliverytech.delivery.model.Restaurante;
 import com.deliverytech.delivery.repository.RestauranteRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class RestauranteService {
     private final RestauranteRepository restauranteRepository;
+    private final ModelMapper mapper;    
 
-    public RestauranteService(RestauranteRepository restauranteRepository) {
+    public RestauranteService(RestauranteRepository restauranteRepository, ModelMapper mapper) {
         this.restauranteRepository = restauranteRepository;
+        this.mapper = mapper;
     }
 
-    public Restaurante cadastrarRestaurante(Restaurante dadosRestaurante) {
-        dadosRestaurante.setAtivo(true);
-        return restauranteRepository.save(dadosRestaurante);
+    @Transactional
+    public RestauranteResponseDTO cadastrarRestaurante(RestauranteDTO restauranteDTO) {
+        if(restauranteRepository.existsByNome(restauranteDTO.getNome())) {
+            throw new BusinessException("Restaurante de mesmo nome já foi cadastrado.");
+        }
+        Restaurante restaurante = mapper.map(restauranteDTO, Restaurante.class);
+        restaurante.setAtivo(true);
+        Restaurante restauranteSalvo = restauranteRepository.save(restaurante);
+        return mapper.map(restauranteSalvo, RestauranteResponseDTO.class);
     }
 
      public List<Restaurante> listarAtivos(){

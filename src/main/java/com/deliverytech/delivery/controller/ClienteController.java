@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.deliverytech.delivery.model.Cliente;
 import com.deliverytech.delivery.service.ClienteService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -40,7 +41,7 @@ public class ClienteController {
         return clienteService.buscarPorId(id);
     }
 
-    @PutMapping("/{id}")
+    /*@PutMapping("/{id}")
     public Cliente atualizarCliente(@PathVariable Long id, @RequestBody Cliente novoCliente) {
         return clienteService.atualizarCliente(id, novoCliente);
     }
@@ -49,6 +50,11 @@ public class ClienteController {
     public ResponseEntity<Void> desativarCliente(@PathVariable Long id) {
         clienteService.desativarCliente(id);
         return ResponseEntity.noContent().build();
+    }*/
+
+    @PatchMapping("/{id}/toggle")
+    public ResponseEntity<ClienteResponseDTO> toggleAtivo(@PathVariable Long id){
+        return ResponseEntity.ok(clienteService.toggleAtivo(id));
     }
 
 }
