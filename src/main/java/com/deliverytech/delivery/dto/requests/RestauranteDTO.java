@@ -12,21 +12,24 @@ import lombok.Setter;
 @Setter
 public class RestauranteDTO {
     
-    @NotNull
-    @NotBlank
-    @Size(max = 100)
+    @NotNull(message = "O nome do restaurante é obrigatório.")
+    @NotBlank(message = "O nome do restaurante não pode estar em branco.")
+    @Size(max = 100, message = "O nome do restaurante deve ter no máximo 100 caracteres.")
     private String nome;
 
-    @NotBlank
-    private String categoria;
-
-    @Size(max = 255)
+    @NotBlank(message = "O endereço do restaurante é obrigatório.")
+    @Size(max = 255, message = "O endereço do restaurante deve ter no máximo 255 caracteres.")
     private String endereco;
 
-    @NotBlank
+    @NotBlank(message = "O telefone do restaurante é obrigatório.")
+    @Size(max = 15, message = "O telefone do restaurante deve ter no máximo 15 caracteres.")
     private String telefone;
-    
-    @NotNull
-    private BigDecimal taxaEntrega;
 
+    @NotBlank(message = "A categoria do restaurante é obrigatória.")
+    @Size(max = 50, message = "A categoria do restaurante deve ter no máximo 50 caracteres.")
+    private String categoria;
+
+    @NotNull(message = "A taxa de entrega do restaurante é obrigatória.")
+    private BigDecimal taxaEntrega;
+    
 }

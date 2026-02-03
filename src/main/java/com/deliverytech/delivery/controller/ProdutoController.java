@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.deliverytech.delivery.dto.responses.ProdutoResponseDTO;
 import com.deliverytech.delivery.model.Produto;
 import com.deliverytech.delivery.service.ProdutoService;
 
@@ -22,9 +23,14 @@ public class ProdutoController {
         this.produtoService = produtoService;
     }
 
+    @GetMapping("/{id}")
+    public Produto buscarPorId(@PathVariable Long id) {
+        return produtoService.buscarProdutoPorId(id);
+    }
+
     @PostMapping("/{restauranteId}")
-    public ResponseEntity<Object> adicionarProduto(@PathVariable Long restauranteId, @RequestBody Produto produto) {
-        return ResponseEntity.status(201).body(produtoService.adicionarProdutoNoRestaurante(restauranteId, produto));
+    public ResponseEntity<Produto> cadastrarProduto(@PathVariable Long restauranteId, @RequestBody Produto produto) {
+        return ResponseEntity.status(201).body(produtoService.cadastrarProduto(restauranteId, produto));
     }
 
     @GetMapping("/restaurante/{restauranteId}")

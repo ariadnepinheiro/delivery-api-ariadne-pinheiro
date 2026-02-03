@@ -3,12 +3,13 @@ package com.deliverytech.delivery.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import com.deliverytech.delivery_api.dto.requests.ClienteDTO;
-import com.deliverytech.delivery_api.dto.responses.ClienteResponseDTO;
-import com.deliverytech.delivery_api.exceptions.BusinessException;
-import com.deliverytech.delivery_api.exceptions.EntityNotFoundException;
-/* import com.deliverytech.delivery_api.config.ModelMapperConfig; */
+import com.deliverytech.delivery.dto.requests.ClienteDTO;
+import com.deliverytech.delivery.dto.responses.ClienteResponseDTO;
+import com.deliverytech.delivery.exceptions.BusinessException;
+import com.deliverytech.delivery.exceptions.EntityNotFoundException;
+/* import com.deliverytech.delivery.config.ModelMapperConfig; */
 import com.deliverytech.delivery.model.Cliente;
 import com.deliverytech.delivery.repository.ClienteRepository;
 
@@ -25,37 +26,45 @@ public class ClienteService {
         this.modelMapper = modelMapper;
     }
 
-    /*public Cliente cadastrarCliente(Cliente cliente) {
-        if(clienteRepository.existsByEmail(cliente.getEmail())) {
-            throw new IllegalArgumentException("Email já cadastrado");
-        }
-        cliente.setAtivo(true);
-        cliente.setDataCadastro(LocalDateTime.now());
-        return clienteRepository.save(cliente);
-    }*/
-
-    public ClienteResponseDTO cadastrarCliente(ClienteDTO clienteDTO) {
+    public ClienteResponseDTO cadastrarCliente1(ClienteDTO clienteDTO) {
         if(clienteRepository.existsByEmail(clienteDTO.getEmail())) {
             throw new BusinessException("Email já cadastrado");
         }
+        
         Cliente cliente = modelMapper.map(clienteDTO, Cliente.class);
+
         cliente.setAtivo(true);
         cliente.setDataCadastro(LocalDateTime.now());
+
         Cliente clienteSalvo = clienteRepository.save(cliente);
         return modelMapper.map(clienteSalvo, ClienteResponseDTO.class);
+
     }
 
-    public List<Cliente> listarAtivos() {
-        return clienteRepository.findByAtivoTrue();
+    public List<ClienteResponseDTO> listarAtivos() {
+
+        return clienteRepository.findByAtivoTrue()
+        .stream()
+        .map(clientes -> modelMapper.map(clientes, ClienteResponseDTO.class))
+        .toList();
+
     }
 
-    public List<Cliente> buscarPorNome(String nome){
-        return clienteRepository.findByNomeContainingIgnoreCase(nome);
+    public List<ClienteResponseDTO> buscarPorNome(String nome){
+
+        return clienteRepository.findByNomeContainingIgnoreCase(nome)
+        .stream()
+        .map(cliente -> modelMapper.map(cliente, ClienteResponseDTO.class))
+        .toList();
+
     }
 
-    public Cliente buscarPorId(Long id) {
-        return clienteRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+    public ClienteResponseDTO buscarPorId(Long id) {
+
+        Cliente cliente = clienteRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+            return modelMapper.map(cliente, ClienteResponseDTO.class);
+
     }
 
     /*public Cliente atualizarCliente(Long id, Cliente dadosAtualizados) {
@@ -78,9 +87,12 @@ public class ClienteService {
 
     @Transactional
     public ClienteResponseDTO toggleAtivoCliente(Long id) {
-        Cliente clienteExistente = repository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado com id: "));
-        clienteExistente.setAtivo(!clienteExistente.isAtivo());
+
+        Cliente clienteExistente = clienteRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado."));
+
+        clienteExistente.setAtivo(!clienteExistente.getAtivo());
         return modelMapper.map(clienteExistente, ClienteResponseDTO.class);
+
     }
 }

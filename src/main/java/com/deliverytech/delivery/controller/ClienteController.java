@@ -2,19 +2,22 @@ package com.deliverytech.delivery.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deliverytech.delivery.model.Cliente;
+import com.deliverytech.delivery.dto.requests.ClienteDTO;
+import com.deliverytech.delivery.dto.responses.ClienteResponseDTO;
 import com.deliverytech.delivery.service.ClienteService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -27,22 +30,22 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<Cliente> cadastrarCliente(@RequestBody Cliente cliente) {
-        return ResponseEntity.status(201).body(clienteService.cadastrarCliente(cliente));
+    public ResponseEntity<ClienteResponseDTO> cadastrarCliente(@Valid @RequestBody ClienteDTO cliente) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.cadastrarCliente1(cliente));
     }
 
     @GetMapping("/listar")
-    public List<Cliente> listarClientes() {
+    public List<ClienteResponseDTO> listarClientes() {
         return clienteService.listarAtivos();
     }
     
     @GetMapping("/{id}")
-    public Cliente buscarPorId(@PathVariable Long id) {
+    public ClienteResponseDTO buscarPorId(@PathVariable Long id) {
         return clienteService.buscarPorId(id);
     }
 
     /*@PutMapping("/{id}")
-    public Cliente atualizarCliente(@PathVariable Long id, @RequestBody Cliente novoCliente) {
+    public ClienteResponseDTO atualizarCliente(@PathVariable Long id, @RequestBody ClienteDTO novoCliente) {
         return clienteService.atualizarCliente(id, novoCliente);
     }
 
@@ -54,7 +57,7 @@ public class ClienteController {
 
     @PatchMapping("/{id}/toggle")
     public ResponseEntity<ClienteResponseDTO> toggleAtivo(@PathVariable Long id){
-        return ResponseEntity.ok(clienteService.toggleAtivo(id));
+        return ResponseEntity.ok(clienteService.toggleAtivoCliente(id));
     }
 
 }

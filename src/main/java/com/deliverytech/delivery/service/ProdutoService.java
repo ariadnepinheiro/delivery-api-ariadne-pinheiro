@@ -3,40 +3,74 @@ package com.deliverytech.delivery.service;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.bytebuddy.asm.Advice.OffsetMapping.Factory.Illegal;
 import org.springframework.stereotype.Service;
 
+import com.deliverytech.delivery.dto.requests.ProdutoDTO;
+import com.deliverytech.delivery.dto.responses.ProdutoResponseDTO;
+import com.deliverytech.delivery.exceptions.BusinessException;
+import com.deliverytech.delivery.exceptions.EntityNotFoundException;
 import com.deliverytech.delivery.model.Produto;
 import com.deliverytech.delivery.model.Restaurante;
 import com.deliverytech.delivery.repository.ProdutoRepository;
 import com.deliverytech.delivery.repository.RestauranteRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class ProdutoService {
     private final ProdutoRepository produtoRepository;
     private final RestauranteRepository restauranteRepository;
+    private final ModelMapper modelMapper;
     
-    public ProdutoService(ProdutoRepository produtoRepository, RestauranteRepository restauranteRepository) {
+    public ProdutoService(ProdutoRepository produtoRepository, RestauranteRepository restauranteRepository, ModelMapper modelMapper) {
         this.produtoRepository = produtoRepository;
         this.restauranteRepository = restauranteRepository;
+        this.modelMapper = modelMapper;
     }
 
-    public Produto cadastrarProduto(Long restauranteId, Produto produto) {
-        if(produto.getPreco() ==null || produto.getPreco().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("O preço do produto deve ser maior que zero.");
+    @Transactional
+    public ProdutoResponseDTO cadastrarProduto(Long restauranteId, ProdutoDTO produto) {
+        if(produto.getPreco() == null || produto.getPreco().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BusinessException("O preço do produto deve ser maior que zero.");
         }
+
         Restaurante restaurante = restauranteRepository.findById(restauranteId)
-            .orElseThrow(() -> new IllegalArgumentException("Restaurante não localizado."));
-        produto.setDisponivel(true);
-        produto.setRestaurante(restaurante);
-        return produtoRepository.save(produto);
+            .orElseThrow(() -> new EntityNotFoundException("Restaurante não localizado."));
+
+        if (!restaurante.getAtivo()) {
+            throw new BusinessException("Restaurante inativo. Não é possível cadastrar produtos.");
+        }
+
+        Produto novoProduto = modelMapper.map(produto, Produto.class);
+        novoProduto.setDisponivel(true);
+        novoProduto.setRestaurante(restaurante);
+        Produto produtoSalvo = produtoRepository.save(novoProduto);
+
+        ProdutoResponseDTO produtoResposta = modelMapper.map(produtoSalvo, ProdutoResponseDTO.class);
+        produtoResposta.setRestauranteId(restaurante.getId());
+        return produtoResposta;
     }
 
-    public List<Produto> listarProdutosPorRestaurante(Long restauranteId) {
-        return produtoRepository.findByRestauranteIdAndDisponivelTrue(restauranteId);
+    public List<ProdutoResponseDTO> listarProdutosPorRestaurante(Long restauranteId) {
+        if(!restauranteRepository.existsById(restauranteId)) {
+            throw new EntityNotFoundException("Restaurante não localizado.");
+        }
+        
+        return produtoRepository.findByRestauranteIdAndDisponivelTrue(restauranteId)
+        .stream()
+        .map(produto -> {
+            ProdutoResponseDTO produtoDTO = modelMapper.map(produto, ProdutoResponseDTO.class);
+            produtoDTO.setRestauranteId(restauranteId);
+            return produtoDTO;
+        })
+        .toList();
     }
 
-    public Object adicionarProdutoNoRestaurante(Long restauranteId, Produto produtoRequest) {
-        throw new UnsupportedOperationException("Unimplemented method 'adicionarProdutoNoRestaurante'");
+    public Produto buscarProdutoPorId(Long produtoId) {
+        return produtoRepository.findById(produtoId)
+            .orElseThrow(() -> new IllegalArgumentException("Produto não localizado."));
     }
 
 }

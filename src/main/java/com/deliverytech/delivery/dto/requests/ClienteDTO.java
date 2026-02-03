@@ -20,7 +20,7 @@ public class ClienteDTO {
     private String email;
 
     @NotBlank(message = "O telefone é obrigatório")
-    @Pattern(regexp = "\\d{10,11}", message = "O telefone deve conter apenas números e ter entre 10 e 11 dígitos")
+    @Pattern(regexp = "\\\\(?\\\\d{2}\\\\)?[\\\\s-]?\\\\d{4,5}-?\\\\d{4}", message = "Telefone inválido. Formato esperado: (XX) XXXXX-XXXX ou XX XXXX-XXXX ou similar")
     private String telefone;
 
     @Size(min = 8, max = 100, message = "O endereço deve ter entre 8 e 100 caracteres")

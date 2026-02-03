@@ -6,9 +6,9 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import com.deliverytech.delivery_api.dto.requests.RestauranteDTO;
-import com.deliverytech.delivery_api.dto.responses.RestauranteResponseDTO;
-import com.deliverytech.delivery_api.exceptions.BusinessException;
+import com.deliverytech.delivery.dto.requests.RestauranteDTO;
+import com.deliverytech.delivery.dto.responses.RestauranteResponseDTO;
+import com.deliverytech.delivery.exceptions.BusinessException;
 
 import com.deliverytech.delivery.model.Restaurante;
 import com.deliverytech.delivery.repository.RestauranteRepository;
