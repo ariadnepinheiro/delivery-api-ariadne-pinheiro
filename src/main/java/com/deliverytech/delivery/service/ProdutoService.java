@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.internal.bytebuddy.asm.Advice.OffsetMapping.Factory.Illegal;
 import org.springframework.stereotype.Service;
 
 import com.deliverytech.delivery.dto.requests.ProdutoDTO;
@@ -17,6 +16,7 @@ import com.deliverytech.delivery.repository.ProdutoRepository;
 import com.deliverytech.delivery.repository.RestauranteRepository;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 @Service
 public class ProdutoService {
@@ -28,6 +28,14 @@ public class ProdutoService {
         this.produtoRepository = produtoRepository;
         this.restauranteRepository = restauranteRepository;
         this.modelMapper = modelMapper;
+    }
+
+    private ProdutoResponseDTO returnResponseDTO(Produto produto) {
+        ProdutoResponseDTO produtoDTO = modelMapper.map(produto, ProdutoResponseDTO.class);
+        if(produto.getRestaurante() != null){
+            produtoDTO.setRestauranteId(produto.getRestaurante().getId());
+        }
+        return produtoDTO;
     }
 
     @Transactional
@@ -49,7 +57,6 @@ public class ProdutoService {
         Produto produtoSalvo = produtoRepository.save(novoProduto);
 
         ProdutoResponseDTO produtoResposta = modelMapper.map(produtoSalvo, ProdutoResponseDTO.class);
-        produtoResposta.setRestauranteId(restaurante.getId());
         return produtoResposta;
     }
 
@@ -62,15 +69,23 @@ public class ProdutoService {
         .stream()
         .map(produto -> {
             ProdutoResponseDTO produtoDTO = modelMapper.map(produto, ProdutoResponseDTO.class);
-            produtoDTO.setRestauranteId(restauranteId);
             return produtoDTO;
         })
         .toList();
     }
 
-    public Produto buscarProdutoPorId(Long produtoId) {
-        return produtoRepository.findById(produtoId)
-            .orElseThrow(() -> new IllegalArgumentException("Produto não localizado."));
+    public ProdutoResponseDTO buscarProdutoPorId(Long produtoId) {
+        Produto produto = produtoRepository.findById(produtoId)
+            .orElseThrow(() -> new EntityNotFoundException("Produto não localizado."));
+        ProdutoResponseDTO produtoDTO = modelMapper.map(produto, ProdutoResponseDTO.class);
+        return produtoDTO;
+    }
+
+    public ProdutoResponseDTO toggleDisponibilidade(Long produtoId){
+        Produto produto = produtoRepository.findById(produtoId)
+            .orElseThrow(() -> new EntityNotFoundException("Produto não localizado."));
+        produto.setDisponivel(!produto.getDisponivel());
+        return returnResponseDTO(produto);
     }
 
 }

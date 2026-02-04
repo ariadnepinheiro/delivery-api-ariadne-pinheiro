@@ -1,19 +1,26 @@
 package com.deliverytech.delivery.controller;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.deliverytech.delivery.dto.requests.RestauranteDTO;
+import com.deliverytech.delivery.dto.responses.RestauranteResponseDTO;
 import com.deliverytech.delivery.model.Restaurante;
 import com.deliverytech.delivery.service.RestauranteService;
 
-import java.util.List;
+import jakarta.validation.Valid;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -25,28 +32,29 @@ public class RestauranteController {
     }
 
     @PostMapping
-    public ResponseEntity<Restaurante> cadastrarRestaurante(@RequestBody Restaurante restaurante) {
-        return ResponseEntity.status(201).body(restauranteService.cadastrarRestaurante(restaurante));
+    public ResponseEntity<RestauranteResponseDTO> cadastrarRestaurante(@RequestBody @Valid RestauranteDTO dadosDTO) {
+        RestauranteResponseDTO restauranteCadastrado = restauranteService.cadastrarRestaurante(dadosDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(restauranteCadastrado);
     }
 
     @GetMapping("/listar")
-    public List<Restaurante> listarRestaurantes() {
-        return restauranteService.listarAtivos();
+    public ResponseEntity<List<Restaurante>> listarRestaurantes() {
+        return ResponseEntity.ok(restauranteService.listarAtivos());
     }
     
     @GetMapping("/{id}")
-    public Restaurante buscarRestaurantePorId(@PathVariable Long id) {
-        return restauranteService.buscarPorId(id);
+    public ResponseEntity<Restaurante> buscarRestaurantePorId(@PathVariable Long id) {
+        return ResponseEntity.ok(restauranteService.buscarPorId(id));
     }
 
-    @GetMapping("/categoria/{categoria}")
-    public List<Restaurante> buscarRestaurantePorCategoria(@PathVariable String categoria){
-        return restauranteService.buscarPorCategoria(categoria);
+    @GetMapping("/categoria")
+    public ResponseEntity<List<Restaurante>> buscarRestaurantePorCategoria(@RequestParam String categoria){
+        return ResponseEntity.ok(restauranteService.buscarPorCategoria(categoria));
     }
 
-    @DeleteMapping("/{id}")
-    public void desativarRestaurante(@PathVariable Long id) {
-        restauranteService.desativarRestaurante(id);
+    @PatchMapping("/{id}/toggle")
+    public ResponseEntity<Object> toggleEntity(@PathVariable Long id) {
+        return ResponseEntity.ok(restauranteService.toggleAtivo(id));
     }
     
 }

@@ -26,7 +26,7 @@ public class ClienteService {
         this.modelMapper = modelMapper;
     }
 
-    public ClienteResponseDTO cadastrarCliente1(ClienteDTO clienteDTO) {
+    public ClienteResponseDTO cadastrarCliente(ClienteDTO clienteDTO) {
         if(clienteRepository.existsByEmail(clienteDTO.getEmail())) {
             throw new BusinessException("Email já cadastrado");
         }

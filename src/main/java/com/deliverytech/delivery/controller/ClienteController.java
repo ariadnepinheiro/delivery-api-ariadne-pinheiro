@@ -31,7 +31,7 @@ public class ClienteController {
 
     @PostMapping
     public ResponseEntity<ClienteResponseDTO> cadastrarCliente(@Valid @RequestBody ClienteDTO cliente) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.cadastrarCliente1(cliente));
+        return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.cadastrarCliente(cliente));
     }
 
     @GetMapping("/listar")

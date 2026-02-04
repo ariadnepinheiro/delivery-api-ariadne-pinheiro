@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.deliverytech.delivery.dto.requests.RestauranteDTO;
 import com.deliverytech.delivery.dto.responses.RestauranteResponseDTO;
 import com.deliverytech.delivery.exceptions.BusinessException;
-
+import com.deliverytech.delivery.exceptions.EntityNotFoundException;
 import com.deliverytech.delivery.model.Restaurante;
 import com.deliverytech.delivery.repository.RestauranteRepository;
 
@@ -53,5 +53,12 @@ public class RestauranteService {
         Restaurante restaurante =  buscarPorId(id);
         restaurante.setAtivo(false);
         restauranteRepository.save(restaurante);
-    } 
+    }
+
+    public Object toggleAtivo(Long id) {
+        Restaurante restaurante = buscarPorId(id);
+        restaurante.setAtivo(!restaurante.getAtivo());
+        restauranteRepository.save(restaurante);
+        return null;
+    }
 }

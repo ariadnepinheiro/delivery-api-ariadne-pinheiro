@@ -2,13 +2,13 @@ package com.deliverytech.delivery.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.ui.ModelMap;
+import org.modelmapper.ModelMapper;
 
 @Configuration
 public class ModelMapperConfig {
 
     @Bean
-    public ModelMap modelMapper(){
-        return new ModelMap();
+    public ModelMapper modelMapper(){
+        return new ModelMapper();
     }
 }
