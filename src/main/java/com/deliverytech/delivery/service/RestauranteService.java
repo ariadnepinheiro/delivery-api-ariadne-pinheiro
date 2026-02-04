@@ -38,7 +38,7 @@ public class RestauranteService {
     }
 
      public List<RestauranteResponseDTO> listarAtivos(){
-        return restauranteRepository.findByAtivoTrue();
+        return restauranteRepository.findByAtivoTrue()
         .stream()
         .map(restaurante -> mapper.map(restaurante, RestauranteResponseDTO.class))
         .toList();
@@ -47,7 +47,7 @@ public class RestauranteService {
     public List<RestauranteResponseDTO> buscarPorCategoria(String categoria){
         return restauranteRepository.findByCategoriaAndAtivoTrue(categoria)
             .stream()
-            .map(categoria -> mapper.map(categoria, RestauranteResponseDTO.class))
+            .map(restaurante -> mapper.map(restaurante, RestauranteResponseDTO.class))
             .toList();
     }
 
@@ -69,8 +69,7 @@ public class RestauranteService {
             .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado."));
         restaurante.setAtivo(!restaurante.getAtivo());
 
-        Restaurante.setAtivo(restaurante.getAtivo());
-
+        Restaurante restauranteSalvo = restauranteRepository.save(restaurante);
         return mapper.map(restauranteSalvo, RestauranteResponseDTO.class);
     }
 }

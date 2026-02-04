@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.deliverytech.delivery_api.enums.StatusPedidos;
-import com.deliverytech.delivery_api.model.ItemPedido;
+import com.deliverytech.delivery.enums.StatusPedidos;
+import com.deliverytech.delivery.model.ItemPedido;
 
 import lombok.Getter;
 import lombok.Setter;
