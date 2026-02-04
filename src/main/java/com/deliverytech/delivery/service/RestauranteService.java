@@ -32,33 +32,45 @@ public class RestauranteService {
         }
         Restaurante restaurante = mapper.map(restauranteDTO, Restaurante.class);
         restaurante.setAtivo(true);
+        restaurante.setAvaliacao(BigDecimal.ZERO);
         Restaurante restauranteSalvo = restauranteRepository.save(restaurante);
         return mapper.map(restauranteSalvo, RestauranteResponseDTO.class);
     }
 
-     public List<Restaurante> listarAtivos(){
+     public List<RestauranteResponseDTO> listarAtivos(){
         return restauranteRepository.findByAtivoTrue();
+        .stream()
+        .map(restaurante -> mapper.map(restaurante, RestauranteResponseDTO.class))
+        .toList();
     }
 
-    public List<Restaurante> buscarPorCategoria(String categoria){
-        return restauranteRepository.findByCategoriaAndAtivoTrue(categoria);
+    public List<RestauranteResponseDTO> buscarPorCategoria(String categoria){
+        return restauranteRepository.findByCategoriaAndAtivoTrue(categoria)
+            .stream()
+            .map(categoria -> mapper.map(categoria, RestauranteResponseDTO.class))
+            .toList();
     }
 
-    public Restaurante buscarPorId(Long id){
-        return restauranteRepository.findById(id)
-        .orElseThrow(()-> new IllegalArgumentException("Restaurante não encontrado."));
+    public RestauranteResponseDTO buscarPorId(Long id){
+        Restaurante restaurante = restauranteRepository.findById(id)
+        .orElseThrow(()-> new EntityNotFoundException("Restaurante não encontrado."));
+        return mapper.map(restaurante, RestauranteResponseDTO.class);
     }
 
-    public void desativarRestaurante(Long id){
-        Restaurante restaurante =  buscarPorId(id);
+    /*public void desativarRestaurante(Long id){
+        RestauranteResponseDTO restaurante =  buscarPorId(id);
         restaurante.setAtivo(false);
         restauranteRepository.save(restaurante);
-    }
+    }*/
 
-    public Object toggleAtivo(Long id) {
-        Restaurante restaurante = buscarPorId(id);
+    @Transactional
+    public RestauranteResponseDTO toggleAtivo(Long id) {
+        Restaurante restaurante = restauranteRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado."));
         restaurante.setAtivo(!restaurante.getAtivo());
-        restauranteRepository.save(restaurante);
-        return null;
+
+        Restaurante.setAtivo(restaurante.getAtivo());
+
+        return mapper.map(restauranteSalvo, RestauranteResponseDTO.class);
     }
 }

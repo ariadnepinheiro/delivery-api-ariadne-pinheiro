@@ -83,9 +83,12 @@ public class ProdutoService {
 
     public ProdutoResponseDTO toggleDisponibilidade(Long produtoId){
         Produto produto = produtoRepository.findById(produtoId)
-            .orElseThrow(() -> new EntityNotFoundException("Produto não localizado."));
+        .orElseThrow(() -> new EntityNotFoundException("Produto não localizado."));
         produto.setDisponivel(!produto.getDisponivel());
-        return returnResponseDTO(produto);
+
+        Produto produtoSalvo = produtoRepository.save(produto);
+
+        return returnResponseDTO(produtoSalvo);
     }
 
 }
