@@ -4,7 +4,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import com.deliverytech.delivery.dto.requests.ClienteDTO;
 import com.deliverytech.delivery.dto.responses.ClienteResponseDTO;
 import com.deliverytech.delivery.exceptions.BusinessException;
@@ -38,33 +41,24 @@ public class ClienteService {
 
         Cliente clienteSalvo = clienteRepository.save(cliente);
         return modelMapper.map(clienteSalvo, ClienteResponseDTO.class);
-
     }
 
-    public List<ClienteResponseDTO> listarAtivos() {
-
-        return clienteRepository.findByAtivoTrue()
-        .stream()
-        .map(clientes -> modelMapper.map(clientes, ClienteResponseDTO.class))
-        .toList();
-
+    public Page<ClienteResponseDTO> listarAtivos(Pageable pageable) {
+        return clienteRepository.findByAtivoTrue(pageable)
+        .map(cliente -> modelMapper.map(cliente, ClienteResponseDTO.class));
     }
 
     public List<ClienteResponseDTO> buscarPorNome(String nome){
-
         return clienteRepository.findByNomeContainingIgnoreCase(nome)
         .stream()
         .map(cliente -> modelMapper.map(cliente, ClienteResponseDTO.class))
         .toList();
-
     }
 
     public ClienteResponseDTO buscarPorId(Long id) {
-
         Cliente cliente = clienteRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+            .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
             return modelMapper.map(cliente, ClienteResponseDTO.class);
-
     }
 
     /*public Cliente atualizarCliente(Long id, Cliente dadosAtualizados) {
@@ -87,12 +81,10 @@ public class ClienteService {
 
     @Transactional
     public ClienteResponseDTO toggleAtivoCliente(Long id) {
-
         Cliente clienteExistente = clienteRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado."));
 
         clienteExistente.setAtivo(!clienteExistente.getAtivo());
         return modelMapper.map(clienteExistente, ClienteResponseDTO.class);
-
     }
 }

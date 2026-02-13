@@ -51,8 +51,8 @@ public class RestauranteController {
     }
 
     @PatchMapping("/{id}/toggle")
-    public ResponseEntity<RestauranteResponseDTO> toggleEntity(@PathVariable Long id) {
-        return ResponseEntity.ok(restauranteService.toggleAtivo(id));
+    public ResponseEntity<RestauranteResponseDTO> toggle(@PathVariable Long id) {
+        return ResponseEntity.ok(restauranteService.toggle(id));
     }
     
 }

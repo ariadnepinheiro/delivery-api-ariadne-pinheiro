@@ -101,7 +101,6 @@ public class DataLoader {
             pedido1.setRestaurante(r1);
             pedido1.setStatus(StatusPedidos.PENDENTE);
             pedido1.setEnderecoEntrega(cliente1.getEndereco());
-            pedido1.setTaxaEntrega(r1.getTaxaEntrega());
             pedido1.setValorTotal(BigDecimal.ZERO);
 
             Pedido pedido2 = new Pedido();
@@ -109,7 +108,6 @@ public class DataLoader {
             pedido2.setRestaurante(r2);
             pedido2.setStatus(StatusPedidos.PENDENTE);
             pedido2.setEnderecoEntrega(cliente2.getEndereco());
-            pedido2.setTaxaEntrega(r2.getTaxaEntrega());
             pedido2.setValorTotal(BigDecimal.ZERO);
 
             pedidoRepository.save(pedido1);
@@ -126,11 +124,28 @@ public class DataLoader {
             item2.setProduto(p1);
             item2.setPedido(pedido1);
             item2.setPrecoUnitario(p1.getPreco());
-            item2.setQuantidade(5);
+            item2.setQuantidade(2);
             item2.setSubtotal(p1.getPreco().multiply(BigDecimal.valueOf(item2.getQuantidade())));
+            
+            ItemPedido item3 = new ItemPedido();
+            item3.setProduto(p2);
+            item3.setPedido(pedido1);
+            item3.setPrecoUnitario(p2.getPreco());
+            item3.setQuantidade(1);
+            item3.setSubtotal(p2.getPreco().multiply(BigDecimal.valueOf(item3.getQuantidade())));            
             
             itemPedidoRepository.save(item1);
             itemPedidoRepository.save(item2);
+            itemPedidoRepository.save(item3);
+
+            BigDecimal totalPedido1 = item2.getSubtotal().add(item3.getSubtotal());
+            pedido1.setValorTotal(totalPedido1);
+
+            BigDecimal totalPedido2 = item1.getSubtotal();
+            pedido2.setValorTotal(totalPedido2);
+
+            pedidoRepository.save(pedido1);
+            pedidoRepository.save(pedido2);            
 
             System.out.println("Dados carregados com sucesso!");
 

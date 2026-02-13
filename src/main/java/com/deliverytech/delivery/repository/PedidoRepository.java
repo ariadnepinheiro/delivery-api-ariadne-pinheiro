@@ -15,36 +15,49 @@ import com.deliverytech.delivery.model.Pedido;
 
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
-    List<Pedido> findByClienteId(Long clienteId);
-    List<Pedido> findByStatus(StatusPedidos status);
 
     @Query("""
-            SELECT p FROM Pedido p 
-            WHERE p.dataPedido BETWEEN :inicio AND :fim
+            SELECT DISTINCT p 
+            FROM Pedido p 
+                JOIN FETCH p.cliente
+                JOIN FETCH p.restaurante
+                LEFT JOIN FETCH p.itens i
+                LEFT JOIN FETCH i.produto
+            WHERE p.cliente.id = :clienteId
+        """)
+        List<Pedido> buscarItensPorCliente(
+            @Param("clienteId") Long clienteId);
+
+        List<Pedido> findByStatus(StatusPedidos status);
+
+    @Query("""
+            SELECT p
+            FROM Pedido p
+            WHERE p.dataPedido BETWEEN :dataInicio AND :dataFim
         """)
         List<Pedido> findByDateTime(
-            @Param("inicio") LocalDateTime inicio, 
-            @Param("fim") LocalDateTime fim
-    );
+            @Param("dataInicio") LocalDateTime dataInicio, 
+            @Param("dataFim") LocalDateTime dataFim
+        );
 
     @Query("""
             SELECT NEW com.deliverytech.delivery.dto.TotalVendasPorRestauranteDTO(
-            r.nome,
-            coalesce(SUM(ip.subtotal), 0)
+                r.nome, 
+                coalesce(sum(ip.subtotal), 0)
             )
             FROM Pedido p
                 JOIN p.restaurante r
-                JOIN p.itens ip
+                LEFT JOIN p.itens ip
             GROUP BY r.nome
         """)
         List<TotalVendasPorRestauranteDTO> totalVendasPorRestaurante();
-
-        @Query(value="""
-                    SELECT c.nome AS cliente, COUNT(p.id) AS total_pedidos
-                    FROM pedidos p 
-                        JOIN clientes c ON c.id = p.cliente_id
-                    GROUP BY c.nome
-                    ORDER BY total_pedidos DESC
-            """, nativeQuery = true )
+        
+    @Query(value="""
+            SELECT c.nome AS cliente, COUNT(p.id) AS total_pedidos
+            FROM pedidos p 
+                    JOIN clientes c ON c.id = p.cliente_id
+            GROUP BY c.nome
+            ORDER BY total_pedidos DESC
+        """, nativeQuery = true )
         List<Object[]> rankingClientes();
 }

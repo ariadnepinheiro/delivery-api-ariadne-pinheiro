@@ -16,19 +16,12 @@ import com.deliverytech.delivery.repository.ProdutoRepository;
 import com.deliverytech.delivery.repository.RestauranteRepository;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 
 @Service
 public class ProdutoService {
     private final ProdutoRepository produtoRepository;
     private final RestauranteRepository restauranteRepository;
     private final ModelMapper modelMapper;
-    
-    public ProdutoService(ProdutoRepository produtoRepository, RestauranteRepository restauranteRepository, ModelMapper modelMapper) {
-        this.produtoRepository = produtoRepository;
-        this.restauranteRepository = restauranteRepository;
-        this.modelMapper = modelMapper;
-    }
 
     private ProdutoResponseDTO returnResponseDTO(Produto produto) {
         ProdutoResponseDTO produtoDTO = modelMapper.map(produto, ProdutoResponseDTO.class);
@@ -36,6 +29,12 @@ public class ProdutoService {
             produtoDTO.setRestauranteId(produto.getRestaurante().getId());
         }
         return produtoDTO;
+    }
+
+    public ProdutoService(ProdutoRepository produtoRepository, RestauranteRepository restauranteRepository, ModelMapper modelMapper) {
+        this.produtoRepository = produtoRepository;
+        this.restauranteRepository = restauranteRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Transactional

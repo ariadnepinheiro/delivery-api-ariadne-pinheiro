@@ -19,7 +19,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-
 @Entity
 @Table(name = "restaurantes")
 public class Restaurante {

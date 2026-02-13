@@ -18,7 +18,7 @@ public class ProdutoDTO {
     private String nome;
 
     @NotBlank(message = "A descrição do produto é obrigatória.")
-    @Size(min=5, max = 255, message = "A descrição do produto deve ter no mínimo 5 e nomáximo 255 caracteres.")
+    @Size(min=5, max=255, message = "A descrição do produto deve ter no mínimo 5 e no máximo 255 caracteres.")
     private String descricao;
 
     @NotBlank(message = "A categoria do produto é obrigatória.")

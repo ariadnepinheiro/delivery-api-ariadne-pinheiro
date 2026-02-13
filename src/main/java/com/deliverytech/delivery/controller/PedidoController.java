@@ -2,17 +2,20 @@ package com.deliverytech.delivery.controller;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deliverytech.delivery.enums.StatusPedidos;
-import com.deliverytech.delivery.model.Pedido;
+import com.deliverytech.delivery.dto.requests.PedidoDTO;
+import com.deliverytech.delivery.dto.responses.PedidoResponseDTO;
 import com.deliverytech.delivery.service.PedidoService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -24,17 +27,27 @@ public class PedidoController {
     }
 
     @PostMapping("/criar")
-    public Pedido criarPedido(@RequestParam Long clienteId, @RequestParam Long restauranteId) {
-        return pedidoService.criarPedido(clienteId, restauranteId);
+    public ResponseEntity<PedidoResponseDTO> criarPedido(@RequestBody @Valid PedidoDTO pedidoDTO) {
+        return ResponseEntity.ok(pedidoService.criarPedido(pedidoDTO));
+    }
+
+    @PutMapping("/{id}/confirmar")
+    public ResponseEntity<PedidoResponseDTO> confirmarPedido(@PathVariable Long id) {
+        return ResponseEntity.ok(pedidoService.confirmarPedido(id));
     }
 
     @PutMapping("/{id}/status")
-    public Pedido atualizarStatusPedido(@PathVariable Long id, @RequestParam StatusPedidos status) {
-        return pedidoService.atualizarStatus(id, status);
+    public ResponseEntity<PedidoResponseDTO> atualizarStatusPedido(@PathVariable Long id) {
+        return ResponseEntity.ok(pedidoService.atualizarStatus(id));
     }
 
-    @GetMapping("/cliente/{id}")
-    public List<Pedido> listarPedidosPorCliente(@PathVariable Long id) {
-        return pedidoService.listarPorCliente(id);
+    @GetMapping("/cliente/{clienteId}")
+    public ResponseEntity<List<PedidoResponseDTO>> listarItensPorCliente(@PathVariable Long clienteId) {
+        return ResponseEntity.ok(pedidoService.listarItensPorCliente(clienteId));
+    }
+
+    @PutMapping("/{id}/cancelar")
+    public ResponseEntity<PedidoResponseDTO> cancelarPedido(@PathVariable Long id) {
+        return ResponseEntity.ok(pedidoService.cancelarPedido(id));
     }
 }

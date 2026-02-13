@@ -39,13 +39,12 @@ public class ProdutoController {
     }
 
     @GetMapping("/restaurante/{restauranteId}")
-    public List<ProdutoResponseDTO> listarProdutosDoRestaurante(@PathVariable Long restauranteId) {
-        return produtoService.listarProdutosPorRestaurante(restauranteId);
+    public ResponseEntity<List<ProdutoResponseDTO>> listarProdutosPorRestaurante(@PathVariable Long restauranteId) {
+        return ResponseEntity.ok(produtoService.listarProdutosPorRestaurante(restauranteId));
     }
 
-    @PatchMapping("/{produtoId}/toggle-disponibilidade")
+    @PatchMapping("/{produtoId}/disponibilidade")
     public ResponseEntity<ProdutoResponseDTO> toggleDisponibilidade(@PathVariable Long produtoId) {
-        ProdutoResponseDTO produtoAtualizado = produtoService.toggleDisponibilidade(produtoId);
-        return ResponseEntity.ok(produtoAtualizado);
+        return ResponseEntity.ok(produtoService.toggleDisponibilidade(produtoId));
     }
 }

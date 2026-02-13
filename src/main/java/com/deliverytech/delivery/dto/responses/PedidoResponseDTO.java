@@ -14,7 +14,6 @@ import lombok.Setter;
 @Setter
 public class PedidoResponseDTO {
     
-    private String numeroPedido;
     private LocalDateTime dataPedido;
     private BigDecimal valorTotal;
     private StatusPedidos status;
