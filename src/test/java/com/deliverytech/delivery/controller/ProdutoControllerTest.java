@@ -107,7 +107,7 @@ public class ProdutoControllerTest {
                 .andReturn().getResponse().getContentAsString();
         
 
-        Object id = com.jayway.jsonpath.JsonPath.read(response, "$.dados.id");
+        Object id = com.jayway.jsonpath.JsonPath.read(response, "$.id");
 
         mockMvc.perform(patch("/produtos/{id}/disponibilidade", id))
                 .andExpect(status().isOk())
