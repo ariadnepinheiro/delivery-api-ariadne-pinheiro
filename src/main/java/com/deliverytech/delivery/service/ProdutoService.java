@@ -18,9 +18,17 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class ProdutoService {
-    private final ProdutoRepository produtoRepository = null;
-    private final RestauranteRepository restauranteRepository = null;
-    private final ModelMapper modelMapper = new ModelMapper();
+    private final ProdutoRepository produtoRepository;
+    private final RestauranteRepository restauranteRepository;
+    private final ModelMapper modelMapper;
+
+    public ProdutoService(ProdutoRepository produtoRepository,
+                          RestauranteRepository restauranteRepository,
+                          ModelMapper modelMapper) {
+    this.produtoRepository = produtoRepository;
+    this.restauranteRepository = restauranteRepository;
+    this.modelMapper = modelMapper;
+    }
 
     private ProdutoResponseDTO returnResponseDTO(Produto produto) {
         ProdutoResponseDTO produtoDTO = modelMapper.map(produto, ProdutoResponseDTO.class);
