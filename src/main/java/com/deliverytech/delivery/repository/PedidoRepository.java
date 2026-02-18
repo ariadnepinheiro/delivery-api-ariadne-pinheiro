@@ -29,7 +29,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
         countQuery = "SELECT COUNT(DISTINCT p) FROM Pedido p WHERE p.cliente.id = :clienteId")
         
         Page<Pedido> buscarItensPorCliente(@Param("clienteId") Long clienteId, Pageable pageable);
-        Page<Pedido> findByStatus(StatusPedidos status);
+        Page<Pedido> findByStatus(StatusPedidos status, Pageable pageable);
 
     @Query("""
             SELECT p

@@ -100,18 +100,6 @@ public class RestauranteController {
             .body(new com.deliverytech.delivery.dto.responses.ApiResponse<>(restauranteService.buscarPorId(id)));
     }
 
-    @Operation(summary = "Buscar restaurantes por Id (paginado).")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Restaurantes encontrados com sucesso."),
-        @ApiResponse(responseCode = "404", description = "Nenhum restaurante encontrado para essa categoria.")
-    })
-    @GetMapping("/{id}")
-    public ResponseEntity<com.deliverytech.delivery.dto.responses.ApiResponse<RestauranteResponseDTO>> buscarRestaurantePorIdAtivo(@PathVariable Long id) {
-        return ResponseEntity.ok()
-            .header("Content-Type", "application/json")
-            .body(new com.deliverytech.delivery.dto.responses.ApiResponse<>(restauranteService.buscarPorId(id)));
-    }
-
     @Operation(summary = "Buscar restaurantes por categoria (paginado).")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Restaurantes encontrados com sucesso."),
