@@ -3,7 +3,7 @@ package com.deliverytech.delivery.dto.requests;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+/*import jakarta.validation.constraints.Pattern;*/
 import jakarta.validation.constraints.Size;
 
 import lombok.Getter;
@@ -25,7 +25,7 @@ public class ClienteDTO {
 
     @Schema(description = "Telefone do cliente", example = "(11) 98765-4321")
     @NotBlank(message = "O telefone é obrigatório")
-    @Pattern(regexp="\\(?\\d{2}\\)?[\\s-]?\\d{4,5}-?\\d{4}", message="Telefone inválido. Formato esperado: (XX) XXXXX-XXXX ou XX XXXX-XXXX ou similar")
+    /*@Pattern(regexp="\\(?\\d{2}\\)?[\\s-]?\\d{4,5}-?\\d{4}", message="Telefone inválido. Formato esperado: (XX) XXXXX-XXXX ou XX XXXX-XXXX ou similar")*/
     private String telefone;
     
     @Schema(description = "Endereço do cliente", example = "Rua Exemplo, 123, Bairro, Cidade, Estado")

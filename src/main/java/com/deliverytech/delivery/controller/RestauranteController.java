@@ -70,7 +70,7 @@ public class RestauranteController {
     @Operation(summary = "Listar restaurantes ativos (paginado).")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de restaurantes ativos retornada com sucesso."),
-        @ApiResponse(responseCode = "400", description = "Parâmetros de paginação inválidos.")
+        @ApiResponse(responseCode = "409", description = "Parâmetros de paginação inválidos.")
     })
 
     @GetMapping("/listar")
