@@ -71,7 +71,7 @@ public class ProdutoControllerTest {
                 .andExpect(status().isCreated())
             
                 .andExpect(jsonPath("$.nome", is("X-Burger Especial")))
-                .andExpect(jsonPath("$.dados.preco", is(35.90)));
+                .andExpect(jsonPath("$.preco", is(35.90)));
     }
 
     @Test
@@ -111,6 +111,6 @@ public class ProdutoControllerTest {
 
         mockMvc.perform(patch("/produtos/{id}/disponibilidade", id))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.dados.disponivel").exists());
+                .andExpect(jsonPath("$.disponivel").exists());
     }
 }
