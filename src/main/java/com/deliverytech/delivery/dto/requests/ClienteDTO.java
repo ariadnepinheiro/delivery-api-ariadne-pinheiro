@@ -25,7 +25,7 @@ public class ClienteDTO {
 
     @Schema(description = "Telefone do cliente", example = "(11) 98765-4321")
     @NotBlank(message = "O telefone é obrigatório")
-    @Pattern(regexp = "\\(\\d{2}\\) \\d{5}-\\d{4}", message = "O telefone deve estar no formato (XX) XXXXX-XXXX")
+    @Pattern(regexp="\\(?\\d{2}\\)?[\\s-]?\\d{4,5}-?\\d{4}", message="Telefone inválido. Formato esperado: (XX) XXXXX-XXXX ou XX XXXX-XXXX ou similar")
     private String telefone;
     
     @Schema(description = "Endereço do cliente", example = "Rua Exemplo, 123, Bairro, Cidade, Estado")
