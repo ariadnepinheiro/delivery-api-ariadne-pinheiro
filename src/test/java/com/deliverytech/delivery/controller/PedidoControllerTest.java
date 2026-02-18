@@ -52,6 +52,7 @@ public class PedidoControllerTest {
         Restaurante rest = new Restaurante();
         rest.setNome("Burger King");
         rest.setTaxaEntrega(BigDecimal.valueOf(5.0));
+        rest.setAtivo(true);
         rest = restauranteRepository.save(rest);
         restauranteId = rest.getId();
 
@@ -60,6 +61,7 @@ public class PedidoControllerTest {
         prod.setNome("Whopper");
         prod.setPreco(BigDecimal.valueOf(30.0));
         prod.setRestaurante(rest);
+        prod.setDisponivel(true);
         prod = produtoRepository.save(prod);
         produtoId = prod.getId();
     }
@@ -86,7 +88,7 @@ public class PedidoControllerTest {
                 .content(objectMapper.writeValueAsString(criarPedidoDTO())))
                 .andExpect(status().isCreated()) // Ou .isOk() dependendo do seu Controller
                 .andExpect(jsonPath("$.dados.status", is("PENDENTE")))
-                .andExpect(jsonPath("$.dados.nomeCliente", is("João Silva")));
+                .andExpect(jsonPath("$.dados.nomeCliente", is("Ariadne")));
     }
 
     @Test

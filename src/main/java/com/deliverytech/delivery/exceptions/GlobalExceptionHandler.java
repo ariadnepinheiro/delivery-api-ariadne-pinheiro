@@ -14,8 +14,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<String> handleBusiness(BusinessException ex){
-        return ResponseEntity.badRequest().body(ex.getMessage());
+    public ResponseEntity<Object> handleBusiness(BusinessException ex){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
 }

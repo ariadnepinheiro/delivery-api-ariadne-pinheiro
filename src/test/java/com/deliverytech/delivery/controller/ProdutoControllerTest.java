@@ -70,7 +70,7 @@ public class ProdutoControllerTest {
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated())
             
-                .andExpect(jsonPath("$.dados.nome", is("X-Burger Especial")))
+                .andExpect(jsonPath("$.nome", is("X-Burger Especial")))
                 .andExpect(jsonPath("$.dados.preco", is(35.90)));
     }
 
