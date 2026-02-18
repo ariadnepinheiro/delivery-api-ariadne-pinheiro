@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.CacheControl;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,17 +24,16 @@ import com.deliverytech.delivery.dto.responses.ClienteResponseDTO;
 import com.deliverytech.delivery.dto.responses.PagedResponse;
 import com.deliverytech.delivery.service.ClienteService;
 
-import io.micrometer.core.ipc.http.HttpSender.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-
 @RestController
-@RequestMapping(value = "/clientes",
-        produces = "application/json")  
+@RequestMapping(
+    value = "/clientes",
+    produces = "application/json")  
 
 @CrossOrigin(origins = "*")
 @Tag(name = "Clientes", description = "Endpoints para gerenciamento de clientes.")
@@ -59,6 +57,7 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity<com.deliverytech.delivery.dto.responses.ApiResponse<ClienteResponseDTO>> cadastrarCliente(@Valid @RequestBody ClienteDTO cliente) {
         ClienteResponseDTO clienteCriado = clienteService.cadastrarCliente(cliente);
+
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(clienteCriado.getId())
@@ -81,8 +80,8 @@ public class ClienteController {
         @RequestParam(defaultValue = "10") int size
     ){
         Pageable pageable = PageRequest.of(page, size);
-        var pageResult = clienteService.listarClientesAtivos(pageable);
-        var response = new PagedResponse<ClienteResponseDTO>(pageResult)
+        var pageResult = clienteService.listarAtivos(pageable);
+        var response = new PagedResponse<ClienteResponseDTO>(pageResult);
         return ResponseEntity.ok()
         .header("Content-Type", "application/json")
         .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS))

@@ -2,6 +2,8 @@ package com.deliverytech.delivery.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +12,7 @@ import com.deliverytech.delivery.model.Produto;
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     List<Produto> findByRestauranteId(Long restauranteId);
-    List<Produto> findByCategoria(String categoria);
+    Page<Produto> findByCategoria(String categoria, Pageable pageable);
     List<Produto> findByDisponivelTrue();
-    List<Produto> findByRestauranteIdAndDisponivelTrue(Long restauranteId);
+    Page<Produto> findByRestauranteIdAndDisponivelTrue(Long restauranteId, Pageable pageable);
 }

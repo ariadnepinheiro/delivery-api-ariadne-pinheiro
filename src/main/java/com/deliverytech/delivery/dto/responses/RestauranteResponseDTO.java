@@ -8,6 +8,7 @@ import lombok.*;
 @Setter
 public class RestauranteResponseDTO {
 
+    private Long id;
     private String nome;
     private String categoria;
     private String endereco;

@@ -1,10 +1,12 @@
 package com.deliverytech.delivery.service;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.deliverytech.delivery.dto.requests.RestauranteDTO;
 import com.deliverytech.delivery.dto.responses.RestauranteResponseDTO;
@@ -12,8 +14,6 @@ import com.deliverytech.delivery.exceptions.BusinessException;
 import com.deliverytech.delivery.exceptions.EntityNotFoundException;
 import com.deliverytech.delivery.model.Restaurante;
 import com.deliverytech.delivery.repository.RestauranteRepository;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class RestauranteService {
@@ -33,35 +33,26 @@ public class RestauranteService {
         Restaurante restaurante = mapper.map(restauranteDTO, Restaurante.class);
         restaurante.setAtivo(true);
         restaurante.setAvaliacao(BigDecimal.ZERO);
+
         Restaurante restauranteSalvo = restauranteRepository.save(restaurante);
         return mapper.map(restauranteSalvo, RestauranteResponseDTO.class);
     }
 
-     public List<RestauranteResponseDTO> listarAtivos(){
-        return restauranteRepository.findByAtivoTrue()
-        .stream()
-        .map(restaurante -> mapper.map(restaurante, RestauranteResponseDTO.class))
-        .toList();
+    public Page<RestauranteResponseDTO> listarAtivos(Pageable pageable){
+        return restauranteRepository.findByAtivoTrue(pageable)
+            .map(restaurante -> mapper.map(restaurante, RestauranteResponseDTO.class));
     }
 
-    public List<RestauranteResponseDTO> buscarPorCategoria(String categoria){
-        return restauranteRepository.findByCategoriaAndAtivoTrue(categoria)
-            .stream()
-            .map(restaurante -> mapper.map(restaurante, RestauranteResponseDTO.class))
-            .toList();
+    public Page<RestauranteResponseDTO> buscarPorCategoria(String categoria, Pageable pageable){
+        return restauranteRepository.findByCategoriaAndAtivoTrue(categoria, Pageable.ofSize(10))
+            .map(restaurante -> mapper.map(restaurante, RestauranteResponseDTO.class));
     }
 
     public RestauranteResponseDTO buscarPorId(Long id){
         Restaurante restaurante = restauranteRepository.findById(id)
-        .orElseThrow(()-> new EntityNotFoundException("Restaurante não encontrado."));
+            .orElseThrow(()-> new EntityNotFoundException("Restaurante não encontrado."));
         return mapper.map(restaurante, RestauranteResponseDTO.class);
     }
-
-    /*public void desativarRestaurante(Long id){
-        RestauranteResponseDTO restaurante =  buscarPorId(id);
-        restaurante.setAtivo(false);
-        restauranteRepository.save(restaurante);
-    }*/
 
     @Transactional
     public RestauranteResponseDTO toggleAtivo(Long id) {

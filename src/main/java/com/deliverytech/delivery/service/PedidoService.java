@@ -1,10 +1,11 @@
 package com.deliverytech.delivery.service;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,18 +32,18 @@ public class PedidoService {
     private final PedidoRepository pedidoRepository;
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private final ClienteRepository clienteRepository;
 
     @Autowired
-    private RestauranteRepository restauranteRepository;
+    private final RestauranteRepository restauranteRepository;
 
     @Autowired
-    private ItemPedidoRepository itemPedidoRepository;
+    private final ItemPedidoRepository itemPedidoRepository;
 
     @Autowired
-    private ProdutoRepository produtoRepository;
+    private final ProdutoRepository produtoRepository;
 
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     private PedidoResponseDTO toResponseDTO(Pedido pedido){
         return modelMapper.map(pedido, PedidoResponseDTO.class);
@@ -71,12 +72,11 @@ public class PedidoService {
         Restaurante restaurante = restauranteRepository.findById(pedidoDTO.getRestauranteId())
         .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado."));
 
-            if(!restaurante.getAtivo()){
-                throw new BusinessException("Restaurante inativo não pode receber pedidos.");
-            }
-
-        Pedido entradaPedido = new Pedido();
-
+        if(!restaurante.getAtivo()){
+            throw new BusinessException("Restaurante inativo não pode receber pedidos.");
+        }
+    
+        Pedido entradaPedido = new Pedido();        
         entradaPedido.setCliente(cliente);
         entradaPedido.setRestaurante(restaurante);
         entradaPedido.setStatus(StatusPedidos.PENDENTE);
@@ -88,16 +88,11 @@ public class PedidoService {
             Produto produto = produtoRepository.findById(itemDTO.getProdutoId())
             .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado."));
 
-            /*if(!produto.getRestaurante().getId().equals(restaurante.getId())){
-                throw new BusinessException("Produto " + produto.getNome() + " não pertence ao restaurante selecionado.");
-            }*/
-
             if(!produto.getDisponivel()){
                 throw new BusinessException("Produto " + produto.getNome() + " não está disponível no momento.");
             }
 
             ItemPedido item = new ItemPedido();
-
             item.setPedido(entradaPedido);
             item.setProduto(produto);
             item.setQuantidade(itemDTO.getQuantidade());
@@ -109,7 +104,6 @@ public class PedidoService {
             itemPedidoRepository.save(item);
 
             entradaPedido.getItens().add(item);
-            
             total = total.add(subtotal);
         }
         
@@ -122,7 +116,7 @@ public class PedidoService {
     @Transactional
     public PedidoResponseDTO confirmarPedido(Long pedidoId){
         Pedido pedido = pedidoRepository.findById(pedidoId)
-        .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado."));
+            .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado."));
 
         if(pedido.getStatus() != StatusPedidos.PENDENTE){
             throw new BusinessException("Apenas pedidos PENDENTES podem ser confirmados.");
@@ -160,11 +154,9 @@ public class PedidoService {
     }
 
     @Transactional(readOnly = true)
-    public List<PedidoResponseDTO> listarItensPorCliente(Long clienteId){
-        return pedidoRepository.buscarItensPorCliente(clienteId)
-        .stream()
-        .map(this::toResponseDTO)
-        .toList();
+    public Page<PedidoResponseDTO> listarItensPorCliente(Long clienteId, Pageable pageable){
+        return pedidoRepository.buscarItensPorCliente(clienteId, pageable)
+        .map(this::toResponseDTO);
     }
 
     @Transactional
