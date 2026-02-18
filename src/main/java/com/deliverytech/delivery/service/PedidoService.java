@@ -155,6 +155,11 @@ public class PedidoService {
 
     @Transactional(readOnly = true)
     public Page<PedidoResponseDTO> listarItensPorCliente(Long clienteId, Pageable pageable){
+        
+        if(!clienteRepository.existsById(clienteId)){
+            throw new EntityNotFoundException("Cliente não encontrado.");
+        }
+        
         return pedidoRepository.buscarItensPorCliente(clienteId, pageable)
         .map(this::toResponseDTO);
     }

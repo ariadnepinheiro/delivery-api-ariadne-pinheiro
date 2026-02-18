@@ -42,8 +42,9 @@ public class PedidoControllerTest {
     void setUp() {
         
         Cliente cliente = new Cliente();
-        cliente.setNome("João Silva");
-        cliente.setEmail("joao@email.com");
+        cliente.setNome("Ariadne");
+        cliente.setAtivo(true);
+        cliente.setEmail("ariadne@email.com");
         cliente = clienteRepository.save(cliente);
         clienteId = cliente.getId();
 

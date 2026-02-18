@@ -45,6 +45,7 @@ public class ProdutoControllerTest {
         Restaurante restaurante = new Restaurante();
         restaurante.setNome("Restaurante para Teste de Produtos");
         restaurante.setCategoria("Variada");
+        restaurante.setTaxaEntrega(BigDecimal.valueOf(10.0));
         restaurante.setAtivo(true);
         restaurante = restauranteRepository.save(restaurante);
         restauranteIdValido = restaurante.getId();
