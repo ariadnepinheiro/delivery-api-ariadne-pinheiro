@@ -1,6 +1,6 @@
 package com.deliverytech.delivery.controller;
 
-import java.util.URI;
+import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,7 +109,7 @@ public class RestauranteController {
     public ResponseEntity<com.deliverytech.delivery.dto.responses.ApiResponse<RestauranteResponseDTO>> buscarRestaurantePorIdAtivo(@PathVariable Long id) {
         return ResponseEntity.ok()
             .header("Content-Type", "application/json")
-            .body(new com.deliverytech.delivery.dto.responses.ApiResponse<>(restauranteService.buscarPorIdAtivo(id)));
+            .body(new com.deliverytech.delivery.dto.responses.ApiResponse<>(restauranteService.buscarPorId(id)));
     }
 
     @Operation(summary = "Buscar restaurantes por categoria (paginado).")

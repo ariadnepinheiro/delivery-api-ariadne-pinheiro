@@ -1,7 +1,5 @@
 package com.deliverytech.delivery.controller;
 
-import java.util.List;
-
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deliverytech.delivery.dto.responses.ItemPedidoResponseDTO;
 import com.deliverytech.delivery.dto.responses.PagedResponse;
-import com.deliverytech.delivery.model.ItemPedido;
 import com.deliverytech.delivery.service.ItemPedidoService;
 
 import io.swagger.v3.oas.annotations.Operation;
